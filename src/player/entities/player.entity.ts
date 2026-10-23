@@ -28,7 +28,7 @@ export class Player extends Document {
   saga: number;
 
   @Prop()
-  arco: string;
+  bow: string;
 }
 
 export const playerSchema = SchemaFactory.createForClass(Player);
