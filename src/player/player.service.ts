@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto.js';
 import { UpdatePlayerDto } from './dto/update-player.dto.js';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,8 +17,13 @@ export class PlayerService {
     private readonly playerModel: Model<Player>,
   ) {}
 
-  create(createPlayerDto: CreatePlayerDto) {
-    return 'This action adds a new player';
+  async create(createPlayerDto: CreatePlayerDto) {
+    try {
+      const player = await this.playerModel.create(createPlayerDto);
+      return player;
+    } catch (error: any) {
+      this.handleException(error);
+    }
   }
 
   async findAll() {
@@ -34,5 +44,12 @@ export class PlayerService {
 
   remove(id: number) {
     return `This action removes a #${id} player`;
+  }
+
+  private handleException(error: any) {
+    if (error.code === 11000)
+      throw new BadRequestException(`Duplicate fields. Player exists in db.`);
+
+    throw new InternalServerErrorException(`Internal server error.`);
   }
 }
