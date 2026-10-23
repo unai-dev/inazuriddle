@@ -49,8 +49,11 @@ export class PlayerService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} player`;
+  async remove(id: string) {
+    const { deletedCount } = await this.playerModel.deleteOne({ _id: id });
+
+    if (deletedCount === 0)
+      throw new NotFoundException(`Player with id ${id} not found.`);
   }
 
   private handleException(error: any) {

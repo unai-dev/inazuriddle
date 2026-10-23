@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { PlayerService } from './player.service.js';
 import { CreatePlayerDto } from './dto/create-player.dto.js';
@@ -32,12 +34,16 @@ export class PlayerController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playerService.update(+id, updatePlayerDto);
+  update(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Body() updatePlayerDto: UpdatePlayerDto,
+  ) {
+    return this.playerService.update(id, updatePlayerDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playerService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.playerService.remove(id);
   }
 }
