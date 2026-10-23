@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PlayerService } from './player.service.js';
 import { CreatePlayerDto } from './dto/create-player.dto.js';
 import { UpdatePlayerDto } from './dto/update-player.dto.js';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe.js';
 
 @Controller('player')
 export class PlayerController {
@@ -18,8 +27,8 @@ export class PlayerController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playerService.findOne(+id);
+  findOne(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.playerService.findOne(id);
   }
 
   @Patch(':id')
