@@ -38,8 +38,15 @@ export class PlayerService {
     return player;
   }
 
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`;
+  async update(id: string, updatePlayerDto: UpdatePlayerDto) {
+    const player: Player | null = await this.findOne(id);
+
+    try {
+      await player.updateOne(updatePlayerDto);
+      return { ...player.toJSON(), ...updatePlayerDto };
+    } catch (error: any) {
+      this.handleException(error);
+    }
   }
 
   remove(id: number) {
