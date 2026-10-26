@@ -22,7 +22,7 @@ export class PlayerService {
       const player = await this.playerModel.create(createPlayerDto);
       return player;
     } catch (error: any) {
-      this.handleException(error);
+      this.handleException(error, createPlayerDto.name);
     }
   }
 
@@ -45,7 +45,7 @@ export class PlayerService {
       await player.updateOne(updatePlayerDto);
       return { ...player.toJSON(), ...updatePlayerDto };
     } catch (error: any) {
-      this.handleException(error);
+      this.handleException(error, updatePlayerDto.name);
     }
   }
 
@@ -56,9 +56,9 @@ export class PlayerService {
       throw new NotFoundException(`Player with id ${id} not found.`);
   }
 
-  private handleException(error: any) {
+  private handleException(error: any, arg?: string) {
     if (error.code === 11000)
-      throw new BadRequestException(`Duplicate fields. Player exists in db.`);
+      throw new BadRequestException(`Player ${arg} exists in db.`);
 
     throw new InternalServerErrorException(`Internal server error.`);
   }
