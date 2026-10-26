@@ -37,15 +37,22 @@ export class TeamService {
     return team;
   }
 
-  update(id: number, updateTeamDto: UpdateTeamDto) {
-    return `This action updates a #${id} team`;
+  async update(id: string, updateTeamDto: UpdateTeamDto) {
+    const team: Team | null = await this.findOne(id);
+
+    try {
+      await team.updateOne(updateTeamDto);
+      return { ...team, ...updateTeamDto };
+    } catch (error: any) {
+      this.handleException(error, updateTeamDto.name);
+    }
   }
 
   remove(id: number) {
     return `This action removes a #${id} team`;
   }
 
-  private handleException(error: any, arg: string) {
+  private handleException(error: any, arg?: string) {
     if (error.code === 11000) {
       throw new BadRequestException(`Team ${arg} exists in db.`);
     }
