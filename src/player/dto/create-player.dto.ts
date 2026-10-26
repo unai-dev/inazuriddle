@@ -45,5 +45,5 @@ export class CreatePlayerDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  arco: string;
+  bow: string;
 }
