@@ -48,8 +48,11 @@ export class TeamService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} team`;
+  async remove(id: string) {
+    const { deletedCount } = await this.teamModel.deleteOne({ _id: id });
+
+    if (deletedCount === 0)
+      throw new NotFoundException(`Team with id ${id} not found.`);
   }
 
   private handleException(error: any, arg?: string) {

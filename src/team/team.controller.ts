@@ -32,12 +32,15 @@ export class TeamController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTeamDto: UpdateTeamDto) {
-    return this.teamService.update(+id, updateTeamDto);
+  update(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Body() updateTeamDto: UpdateTeamDto,
+  ) {
+    return this.teamService.update(id, updateTeamDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.teamService.remove(+id);
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.teamService.remove(id);
   }
 }
