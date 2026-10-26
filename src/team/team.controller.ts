@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TeamService } from './team.service.js';
 import { CreateTeamDto } from './dto/create-team.dto.js';
 import { UpdateTeamDto } from './dto/update-team.dto.js';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe.js';
 
 @Controller('team')
 export class TeamController {
@@ -18,8 +27,8 @@ export class TeamController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teamService.findOne(+id);
+  findOne(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.teamService.findOne(id);
   }
 
   @Patch(':id')
