@@ -6,7 +6,11 @@ import { PlayerModule } from './player/player.module.js';
 import { TeamModule } from './team/team.module.js';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost:27017/inazuriddle'), PlayerModule, TeamModule],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017/inazuriddle'),
+    PlayerModule,
+    TeamModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
